@@ -13,6 +13,7 @@ namespace BookStore_API.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         Users GetById(int id);
+        string Register(RegisterRequest model);
     }
     public class UserService : IUserService
     {
@@ -28,6 +29,24 @@ namespace BookStore_API.Services
             _context = context;
             _jwtUtils = jwtUtils;
             _mapper = mapper;
+        }
+
+        public string Register(RegisterRequest model)
+        {
+            // validate
+            if (_context.Users.Any(x => x.Username == model.Username))
+                return "Username '" + model.Username + "' is already taken";
+
+            // map model to new user object
+            var user = _mapper.Map<Users>(model);
+
+            // hash password
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+            // save user
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return "Registration successful";
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)

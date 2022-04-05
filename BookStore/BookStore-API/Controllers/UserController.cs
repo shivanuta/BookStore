@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BookStore_Models.Responses;
 using BookStore_API.Services;
@@ -9,7 +12,6 @@ using BookStore_API.Helper;
 using Microsoft.Extensions.Options;
 using BookStore_API.Authorization;
 using BookStore_Models.Requests;
-
 
 namespace BookStore_API.Controllers
 {
@@ -21,7 +23,8 @@ namespace BookStore_API.Controllers
     {
         private IUserService _userService;
         private IMapper _mapper;
-        private readonly Helper.AppSettings _appSettings;
+        private readonly AppSettings _appSettings;
+
         public UsersController(
             IUserService userService,
             IMapper mapper,
@@ -31,6 +34,15 @@ namespace BookStore_API.Controllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register(RegisterRequest model)
+        {
+            string response = _userService.Register(model);
+            return Ok(new { message = response });
+        }
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
