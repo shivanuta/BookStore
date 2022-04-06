@@ -5,4 +5,88 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @*<img src="~/images/Bookstore1.jpg" class="container" />*@
+@*<div class="text-center">*@
+@*<h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+@*<img src="~/images/Bookstore1.jpg" class="container" />*@
+@*</div>*@
+
+
+@*<div class="container">*@
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="2000" data-pause="hover">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <div class="carousel-content">
+                <div style="margin: 0 auto">
+                    @*<h3>#1</h3>*@
+                    <p>
+                        <img alt="The 1st Message." src="~/images/Bookstore1.jpg" style="width: 1368px;height: 580px"  />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="carousel-content">
+                <div style="margin: 0 auto">
+                    @*<h3>#2</h3>*@
+                    <p>
+                        <img alt="The 2nd Message." src="~/images/Bookstore2.jpg" style="width: 1368px;height: 580px"  />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="carousel-content">
+                <div style="margin: 0 auto">
+                    @*<h3>#2</h3>*@
+                    <p>
+                        <img alt="The 2nd Message." src="~/images/Bookstore3.jpg" style="width: 1368px;height: 580px" />
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only"> Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
+@*</div>*@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .carousel-inner {
+        width: auto;
+        height: 562px;
+        max-height: 562px !important;
+        width: 100%;
+    }
+    .carousel-content {
+        color: black;
+        display: flex;
+        text-align: center;
+        width: 100%
+    }
+    #myCarousel {
+        margin-top: -10px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.carousel').carousel();
+    });
+</script>
