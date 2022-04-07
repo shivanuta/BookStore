@@ -13,6 +13,8 @@ public class AutoMapperProfile : Profile
         CreateMap<AdminUsers, AdminAuthenticateResponse>();
         // RegisterRequest -> User
         CreateMap<RegisterRequest, Users>();
+        // Categories -> CategoriesResponse
+        CreateMap<Categories, CategoriesResponse>();
     }
 }
 

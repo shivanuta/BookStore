@@ -52,7 +52,6 @@ namespace BookStore_App.Controllers
                         HttpContext.Session.SetString("Username", authenticateResponse.Username);
                         HttpContext.Session.SetString("Name", authenticateResponse.FirstName + " " + authenticateResponse.LastName);
                         TempData["Profile"] = JsonConvert.SerializeObject(apiResponse);
-                        return RedirectToAction("Index", "Profile");
                         return RedirectToAction("Index", "Admin");
                     }
                     else

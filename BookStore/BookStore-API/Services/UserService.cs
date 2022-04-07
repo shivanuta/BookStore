@@ -13,6 +13,7 @@ namespace BookStore_API.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         Users GetById(int id);
+        AdminUsers GetAdminUserById(int id);
         ApiResponseMessage Register(RegisterRequest model);
         AdminAuthenticateResponse AdminAuthenticate(AuthenticateRequest model);
     }
@@ -83,14 +84,22 @@ namespace BookStore_API.Services
         {
             return getUser(id);
         }
-
+        public AdminUsers GetAdminUserById(int id)
+        {
+            return getAdminUser(id);
+        }
         private Users getUser(int id)
         {
             var user = _context.Users.Find(id);
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
         }
-
+        private AdminUsers getAdminUser(int id)
+        {
+            var user = _context.AdminUsers.Find(id);
+            if (user == null) throw new KeyNotFoundException("User not found");
+            return user;
+        }
         public AdminAuthenticateResponse AdminAuthenticate(AuthenticateRequest model)
         {
             var user = _context.AdminUsers.Where(x => x.IsActive == true).SingleOrDefault(x => x.Username == model.Username);

@@ -1,4 +1,4 @@
-﻿namespace BookStore_API.Authorization;
+﻿//namespace BookStore_API.Authorization;
 
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -7,12 +7,13 @@ using System.Security.Claims;
 using System.Text;
 using BookStore_Models.DBModels;
 using BookStore_API.Helper;
+using BookStore_Models.Responses;
 
 
 public interface IJwtUtils
 {
     public string GenerateToken(Users user);
-    public int? ValidateToken(string token);
+    public ValidateTokenResponse ValidateToken(string token);
     public string GenerateToken(AdminUsers user);
 }
 public class JwtUtils : IJwtUtils
@@ -29,7 +30,8 @@ public class JwtUtils : IJwtUtils
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("isAdmin", "false") }),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -43,7 +45,8 @@ public class JwtUtils : IJwtUtils
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("isAdmin", "true") }),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -51,10 +54,13 @@ public class JwtUtils : IJwtUtils
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateToken(string token)
+
+    public ValidateTokenResponse ValidateToken(string token)
+
     {
+        ValidateTokenResponse response = new ValidateTokenResponse();
         if (token == null)
-            return null;
+            return response;
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         try
@@ -70,13 +76,15 @@ public class JwtUtils : IJwtUtils
             }, out SecurityToken validatedToken);
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            response.Id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            response.IsAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "isAdmin").Value);
             // return user id from JWT token if validation successful
-            return userId;
+            return response;
         }
         catch
         {
             // return null if validation fails
-            return null;
+            return response;
         }
     }
 }

@@ -23,6 +23,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 // configure DI for application services
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
 var app = builder.Build();
 
@@ -36,6 +37,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// custom jwt auth middleware
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 
