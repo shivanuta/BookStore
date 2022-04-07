@@ -46,7 +46,17 @@ namespace BookStore_API.Controllers
         {
             var response = _userService.Authenticate(model);
             return Ok(response);
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost("adminAuthenticate")]
+        public IActionResult AdminAuthenticate(AuthenticateRequest model)
+        {
+             var response = _userService.AdminAuthenticate(model);
+             return Ok(response);
+        }
         }
     }
-}
+
 

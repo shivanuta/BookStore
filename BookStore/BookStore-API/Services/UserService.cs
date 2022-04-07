@@ -14,6 +14,7 @@ namespace BookStore_API.Services
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         Users GetById(int id);
         ApiResponseMessage Register(RegisterRequest model);
+        AdminAuthenticateResponse AdminAuthenticate(AuthenticateRequest model);
     }
     public class UserService : IUserService
     {
@@ -88,6 +89,28 @@ namespace BookStore_API.Services
             var user = _context.Users.Find(id);
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
+        }
+
+        public AdminAuthenticateResponse AdminAuthenticate(AuthenticateRequest model)
+        {
+            var user = _context.AdminUsers.Where(x => x.IsActive == true).SingleOrDefault(x => x.Username == model.Username);
+
+            // validate
+            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+            {
+                var authenticateResponse = new AdminAuthenticateResponse()
+                {
+                    ErrorMessage = "Username or password is incorrect",
+                    ResponseMesssage = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                };
+                return authenticateResponse;
+            }
+
+            // authentication successful
+            var response = _mapper.Map<AdminAuthenticateResponse>(user);
+            response.Token = _jwtUtils.GenerateToken(user);
+            response.ResponseMesssage = new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
         }
 
     }

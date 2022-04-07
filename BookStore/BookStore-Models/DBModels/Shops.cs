@@ -11,7 +11,7 @@ namespace BookStore_Models.DBModels
     {
         [Key]
         public int Id { get; set; }
-        public int ShopName { get; set; }
+        public string ShopName { get; set; }
         public string Address { get; set; }
         public string Pincode { get; set; }
         public string GeoCoordinates { get; set; }

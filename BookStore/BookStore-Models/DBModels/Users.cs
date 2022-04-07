@@ -11,6 +11,11 @@ namespace BookStore_Models.DBModels
 {
     public class Users
     {
+        public Users()
+        {
+            this.IsActive = true;
+            this.CreatedDate = System.DateTime.UtcNow;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -24,6 +29,8 @@ namespace BookStore_Models.DBModels
         public string Email { get; set; }
         public string MobileNo { get; set; }
         public bool IsActive { get; set; }
+        public Nullable<DateTime> CreatedDate { get; set; }
+        public Nullable<DateTime> ModifiedDate { get; set; }
 
         [JsonIgnore]
         public string PasswordHash { get; set; }

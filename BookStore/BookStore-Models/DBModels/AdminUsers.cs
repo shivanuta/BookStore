@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -29,7 +30,11 @@ namespace BookStore_Models.DBModels
 
         public string MobileNo { get; set; }
 
+        [Required, DefaultValue(true)]
         public bool IsActive { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public Nullable<DateTime> ModifiedDate { get; set; }
 
         [ForeignKey("Shops")]
         public int ShopId { get; set; }
