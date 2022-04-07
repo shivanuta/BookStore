@@ -48,8 +48,12 @@ namespace BookStore_App.Controllers
                     if (authenticateResponse != null && authenticateResponse.ResponseMesssage.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         HttpContext.Session.SetString("Token", authenticateResponse.Token);
+                        HttpContext.Session.SetInt32("IsAdmin", 1);
+                        HttpContext.Session.SetString("Username", authenticateResponse.Username);
+                        HttpContext.Session.SetString("Name", authenticateResponse.FirstName + " " + authenticateResponse.LastName);
                         TempData["Profile"] = JsonConvert.SerializeObject(apiResponse);
                         return RedirectToAction("Index", "Profile");
+                        return RedirectToAction("Index", "Admin");
                     }
                     else
                     {
@@ -92,6 +96,9 @@ namespace BookStore_App.Controllers
                     if (authenticateResponse != null && authenticateResponse.ResponseMesssage.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         HttpContext.Session.SetString("Token", authenticateResponse.Token);
+                        HttpContext.Session.SetInt32("IsAdmin", 0);
+                        HttpContext.Session.SetString("Username", authenticateResponse.Username);
+                        HttpContext.Session.SetString("Name", authenticateResponse.FirstName + " " + authenticateResponse.LastName);
                         TempData["Profile"] = JsonConvert.SerializeObject(apiResponse);
                         return RedirectToAction("Index", "Profile");
                     }
