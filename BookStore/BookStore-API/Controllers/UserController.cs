@@ -20,16 +20,13 @@ namespace BookStore_API.Controllers
     {
         private IUserService _userService;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;
 
         public UsersController(
             IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IMapper mapper)
         {
             _userService = userService;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
@@ -46,17 +43,17 @@ namespace BookStore_API.Controllers
         {
             var response = _userService.Authenticate(model);
             return Ok(response);
-
         }
 
         [AllowAnonymous]
         [HttpPost("adminAuthenticate")]
         public IActionResult AdminAuthenticate(AuthenticateRequest model)
         {
-             var response = _userService.AdminAuthenticate(model);
-             return Ok(response);
-        }
+            var response = _userService.AdminAuthenticate(model);
+            return Ok(response);
         }
     }
+}
+
 
 
