@@ -6,4 +6,8 @@
             options.UseSqlServer(Configuration.GetConnectionString("BookStore_APIContext"));
         }
 
-        public DbSet<Users> Users { get; set; }     }}
+        public DbSet<Users> Users { get; set; }        public DbSet<AdminUsers> AdminUsers { get; set; }
+        public DbSet<Shops> Shops { get; set; }
+    }
+
+}
