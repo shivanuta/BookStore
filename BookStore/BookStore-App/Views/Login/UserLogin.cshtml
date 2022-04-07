@@ -12,9 +12,12 @@
             ViewData["Title"] = "User Login";
         }
 
-        <h1>@ViewData["Title"]</h1>
+        <div class="text-center">
+            <h1>@ViewData["Title"]</h1>
+        </div>
 
         <div class="row">
+            <div class="col-md-4"></div>
             <div class="col-md-4">
                 
                 <form asp-route-returnUrl="" method="post" asp-action="UserLoginCheck">
@@ -30,7 +33,9 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
+                    <div class="text-end">
                     <button type="submit" class="btn btn-primary mt-3">Login</button>
+                    </div>
                 </form>
             </div>
 
