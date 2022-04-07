@@ -17,6 +17,8 @@ namespace BookStore_Models.Responses
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
+        public string Email { get; set; }
+        public string MobileNo { get; set; }
         public string Token { get; set; }
         public string ErrorMessage { get; set; }
         public HttpResponseMessage ResponseMesssage { get; set; }

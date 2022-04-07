@@ -20,5 +20,8 @@ namespace BookStore_Models.Requests
         [Required(ErrorMessage = "Confirmation Password is required.")]
         [Compare("Password", ErrorMessage = "Password and Confirmation Password must match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Email { get; set; }
+        public string MobileNo { get; set; }
     }
 }
