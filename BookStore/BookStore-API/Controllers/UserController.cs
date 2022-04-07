@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BookStore_Models.Responses;
 using BookStore_API.Services;
@@ -39,8 +36,8 @@ namespace BookStore_API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest model)
         {
-            string response = _userService.Register(model);
-            return Ok(new { message = response });
+            var response = _userService.Register(model);
+            return Ok(response);
         }
 
         [AllowAnonymous]
@@ -52,3 +49,4 @@ namespace BookStore_API.Controllers
         }
     }
 }
+

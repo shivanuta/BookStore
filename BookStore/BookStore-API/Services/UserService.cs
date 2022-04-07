@@ -13,7 +13,7 @@ namespace BookStore_API.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         Users GetById(int id);
-        string Register(RegisterRequest model);
+        ApiResponseMessage Register(RegisterRequest model);
     }
     public class UserService : IUserService
     {
@@ -31,11 +31,16 @@ namespace BookStore_API.Services
             _mapper = mapper;
         }
 
-        public string Register(RegisterRequest model)
+        public ApiResponseMessage Register(RegisterRequest model)
         {
+            ApiResponseMessage response = new ApiResponseMessage();
             // validate
             if (_context.Users.Any(x => x.Username == model.Username))
-                return "Username '" + model.Username + "' is already taken";
+            {
+                response.ErrorMessage = "Username '" + model.Username + "' is already taken";
+                response.IsSuccess = false;
+                return response;
+            }
 
             // map model to new user object
             var user = _mapper.Map<Users>(model);
@@ -46,7 +51,9 @@ namespace BookStore_API.Services
             // save user
             _context.Users.Add(user);
             _context.SaveChanges();
-            return "Registration successful";
+            response.SuccessMessage = "Registration successful";
+            response.IsSuccess = true;
+            return response;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -85,3 +92,5 @@ namespace BookStore_API.Services
 
     }
 }
+
+
