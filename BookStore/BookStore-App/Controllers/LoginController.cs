@@ -55,15 +55,15 @@ namespace BookStore_App.Controllers
                     {
                         ModelState.Clear();
                         ModelState.AddModelError(string.Empty, "Username or Password is Incorrect");
-                        return View();
+                        return View("Index");
                     }
                 }
             }
         }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult AdminLogin()
-
         {
             return View();
         }
@@ -104,5 +104,7 @@ namespace BookStore_App.Controllers
                 }
             }
         }
+
+
     }
 }
