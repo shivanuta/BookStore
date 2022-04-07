@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookStore_Models.DBModels
 {
-    public class Users
+    public class AdminUsers
     {
         [Key]
         public int Id { get; set; }
@@ -20,11 +20,17 @@ namespace BookStore_Models.DBModels
         public string Username { get; set; }
 
         public string Password { get; set; }
-        public string Email { get; set; }
-        public string MobileNo { get; set; }
-        public bool IsActive { get; set; }
 
         [JsonIgnore]
         public string PasswordHash { get; set; }
+
+        public string Email { get; set; }
+
+        public string MobileNo { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public int ShopId { get; set; }
+        public Shops Shops { get; set; }
     }
 }
