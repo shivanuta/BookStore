@@ -68,12 +68,12 @@ namespace BookStore_App.Controllers
             return View();
         }
 
-        //[AllowAnonymous]
-        //[HttpGet]
-        //public IActionResult UserLogin()
-        //{
-        //    return View();
-        //}
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult UserLogin()
+        {
+            return View();
+        }
         // Method to authenticate user login   
         [AllowAnonymous]
         [HttpPost]
