@@ -2,6 +2,7 @@
 using BookStore_API.Authorization;
 using BookStore_Models.Data;
 using BookStore_Models.DBModels;
+using BookStore_Models.Requests;
 using BookStore_Models.Responses;
 
 namespace BookStore_API.Services
@@ -9,6 +10,7 @@ namespace BookStore_API.Services
     public interface ICategoriesService
     {
         List<CategoriesResponse> GetAllCategories(string searchString);
+        ApiResponseMessage SaveCategory(CategoryRequest categoryRequest);
     }
     public class CategoriesService : ICategoriesService
     {
@@ -28,7 +30,7 @@ namespace BookStore_API.Services
         public List<CategoriesResponse> GetAllCategories(string searchString)
         {
             var categories = from c in _context.Categories
-                         select c;
+                             select c;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -37,6 +39,28 @@ namespace BookStore_API.Services
 
             var response = _mapper.Map<List<CategoriesResponse>>(categories.ToList());
 
+            return response;
+        }
+
+        public ApiResponseMessage SaveCategory(CategoryRequest categoryRequest)
+        {
+            ApiResponseMessage response = new ApiResponseMessage();
+            // validate
+            if (_context.Categories.Any(x => x.CategoryName == categoryRequest.CategoryName))
+            {
+                response.ErrorMessage = "CategoryName '" + categoryRequest.CategoryName + "' is already taken";
+                response.IsSuccess = false;
+                return response;
+            }
+
+            // map model to new user object
+            var category = _mapper.Map<Categories>(categoryRequest);
+
+            // save category
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+            response.SuccessMessage = "Category Added successful";
+            response.IsSuccess = true;
             return response;
         }
     }
