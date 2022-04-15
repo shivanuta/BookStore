@@ -115,6 +115,23 @@ namespace BookStore_App.Controllers
             }
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var token = HttpContext.Session.GetString("Token");
+            string endpoint = apiBaseUrl + "Categories/DeleteCategory/" + id;
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<ApiResponseMessage>(apiResponse);
+                    var categoriesList = await GetAllCategories(String.Empty);
+                    return View("Index", categoriesList);
+                }
+            }
+        }
+
         private async Task<CategoryRequest> GetCategory(int id)
         {
             using (HttpClient client = new HttpClient())

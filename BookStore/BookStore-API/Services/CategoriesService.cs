@@ -13,6 +13,8 @@ namespace BookStore_API.Services
         ApiResponseMessage SaveCategory(CategoryRequest categoryRequest);
 
         CategoryRequest GetCategoryById(int id);
+
+        ApiResponseMessage DeleteCategory(int id);
     }
     public class CategoriesService : ICategoriesService
     {
@@ -82,6 +84,29 @@ namespace BookStore_API.Services
 
             var response = _mapper.Map<CategoryRequest>(categories.FirstOrDefault());
 
+            return response;
+        }
+
+        public ApiResponseMessage DeleteCategory(int id)
+        {
+            ApiResponseMessage response = new ApiResponseMessage();
+            var category = _context.Categories.Where(s => s.Id == id && s.IsActive).FirstOrDefault();
+            // validate
+            if (category != null)
+            {
+                category.IsActive = false;
+                _context.Categories.Update(category);
+            }
+            else
+            {
+                response.ErrorMessage = "Delete Failed...";
+                response.IsSuccess = false;
+                return response;
+
+            }
+            _context.SaveChanges();
+            response.SuccessMessage = "Category Added successful";
+            response.IsSuccess = true;
             return response;
         }
     }

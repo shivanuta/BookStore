@@ -45,5 +45,12 @@ namespace BookStore_API.Controllers
             var response = _categoriesService.GetCategoryById(id);
             return Ok(response);
         }
+
+        [HttpGet("DeleteCategory/{id}")]
+        public IActionResult DeleteCategory(int id)
+        {
+            var response = _categoriesService.DeleteCategory(id);
+            return Ok(response);
+        }
     }
 }
