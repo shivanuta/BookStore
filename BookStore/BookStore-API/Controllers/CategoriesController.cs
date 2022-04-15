@@ -38,5 +38,12 @@ namespace BookStore_API.Controllers
             var response = _categoriesService.SaveCategory(categoryRequest);
             return Ok(response);
         }
+
+        [HttpGet("GetCategoryById/{id}")]
+        public IActionResult GetCategoryById(int id)
+        {
+            var response = _categoriesService.GetCategoryById(id);
+            return Ok(response);
+        }
     }
 }

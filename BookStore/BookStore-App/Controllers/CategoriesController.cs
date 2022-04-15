@@ -32,11 +32,35 @@ namespace BookStore_App.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var category = await GetCategory(id);
+
+            return View(category);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var category = await GetCategory(id);
+
+            return View("Create", category);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> AddCategory(CategoryRequest categoryRequest)
         {
-            categoryRequest.CreatedBy = HttpContext.Session.GetInt32("UserId");
-            categoryRequest.CreatedDate = System.DateTime.UtcNow;
+            if (categoryRequest.Id != 0)
+            {
+                categoryRequest.ModifiedBy = HttpContext.Session.GetInt32("UserId");
+                categoryRequest.ModifiedDate = System.DateTime.UtcNow;
+            }
+            else
+            {
+                categoryRequest.CreatedBy = HttpContext.Session.GetInt32("UserId");
+                categoryRequest.CreatedDate = System.DateTime.UtcNow;
+            }
+
             StringContent content = new StringContent(JsonConvert.SerializeObject(categoryRequest), Encoding.UTF8, "application/json");
             var token = HttpContext.Session.GetString("Token");
             string endpoint = apiBaseUrl + "Categories/CreateCategory";
@@ -86,6 +110,30 @@ namespace BookStore_App.Controllers
                     else
                     {
                         return new List<CategoriesResponse>();
+                    }
+                }
+            }
+        }
+
+        private async Task<CategoryRequest> GetCategory(int id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var token = HttpContext.Session.GetString("Token");
+                string endpoint = apiBaseUrl + "Categories/GetCategoryById/" + id;
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<CategoryRequest>(apiResponse);
+
+                    if (responseMessage != null && Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        return responseMessage;
+                    }
+                    else
+                    {
+                        return new CategoryRequest();
                     }
                 }
             }

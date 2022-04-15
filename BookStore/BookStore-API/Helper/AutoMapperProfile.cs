@@ -16,6 +16,7 @@ public class AutoMapperProfile : Profile
         // Categories -> CategoriesResponse
         CreateMap<Categories, CategoriesResponse>();
         CreateMap<CategoryRequest, Categories>();
+        CreateMap<Categories, CategoryRequest>();
     }
 }
 

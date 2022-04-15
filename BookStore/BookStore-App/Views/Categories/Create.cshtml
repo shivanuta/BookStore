@@ -11,7 +11,10 @@
 
         @model BookStore_Models.Requests.CategoryRequest
         @{
-            ViewData["Title"] = "Add Category";
+            if (Model == null)
+                ViewData["Title"] = "Add Category";
+            else
+                ViewData["Title"] = "Update Category";
         }
 
         <div class="text-center">
@@ -21,7 +24,7 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                
+
                 <form asp-route-returnUrl="" method="post" asp-action="AddCategory">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
@@ -29,10 +32,24 @@
                         <input asp-for="CategoryName" class="form-control" />
                         <span asp-validation-for="CategoryName" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary mt-3">Add</button>
+                        @{
+                            if (Model == null)
+                            {
+                                <button type="submit" class="btn btn-primary mt-3">Add</button>
+                            }
+
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary mt-3">update</button>
+                            }
+                        }
                     </div>
+
+                    @Html.HiddenFor(modelItem => modelItem.Id)
+                    @Html.HiddenFor(modelItem => modelItem.CreatedBy)
+                    @Html.HiddenFor(modelItem => modelItem.CreatedDate)
                 </form>
             </div>
 

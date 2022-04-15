@@ -11,6 +11,8 @@ namespace BookStore_API.Services
     {
         List<CategoriesResponse> GetAllCategories(string searchString);
         ApiResponseMessage SaveCategory(CategoryRequest categoryRequest);
+
+        CategoryRequest GetCategoryById(int id);
     }
     public class CategoriesService : ICategoriesService
     {
@@ -37,7 +39,7 @@ namespace BookStore_API.Services
                 categories = categories.Where(s => s.CategoryName!.Contains(searchString));
             }
 
-            var response = _mapper.Map<List<CategoriesResponse>>(categories.ToList());
+            var response = _mapper.Map<List<CategoriesResponse>>(categories.Where(x => x.IsActive).ToList());
 
             return response;
         }
@@ -57,10 +59,29 @@ namespace BookStore_API.Services
             var category = _mapper.Map<Categories>(categoryRequest);
 
             // save category
-            _context.Categories.Add(category);
+            if (category.Id != 0)
+            {
+                _context.Categories.Update(category);
+            }
+            else
+            {
+                _context.Categories.Add(category);
+            }
             _context.SaveChanges();
             response.SuccessMessage = "Category Added successful";
             response.IsSuccess = true;
+            return response;
+        }
+
+        public CategoryRequest GetCategoryById(int id)
+        {
+            var categories = from c in _context.Categories
+                             select c;
+
+            categories = categories.Where(s => s.Id == id && s.IsActive);
+
+            var response = _mapper.Map<CategoryRequest>(categories.FirstOrDefault());
+
             return response;
         }
     }
