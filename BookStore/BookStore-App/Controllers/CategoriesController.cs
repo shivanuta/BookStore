@@ -57,6 +57,7 @@ namespace BookStore_App.Controllers
                     }
                     else
                     {
+                        ModelState.AddModelError(string.Empty, responseMessage.ErrorMessage);
                         return View("Create", categoryRequest);
                     }
                 }
