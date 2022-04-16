@@ -13,17 +13,20 @@ namespace BookStore_App.Controllers
         private readonly ILogger<BooksController> _logger;
         private readonly IConfiguration _Configure;
         private static string apiBaseUrl;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BooksController(ILogger<BooksController> logger, IConfiguration configuration)
+        public BooksController(ILogger<BooksController> logger, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _Configure = configuration;
+            _webHostEnvironment = webHostEnvironment;
 
             apiBaseUrl = _Configure.GetValue<string>("WebAPIBaseUrl");
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var BookssList = await GetAllBooks(String.Empty);
+            return View(BookssList);
         }
 
         public async Task<IActionResult> Create()
@@ -59,9 +62,6 @@ namespace BookStore_App.Controllers
             multipartContent.Add(new StreamContent(bookRequest.BookImage.OpenReadStream()), "BookImage", bookRequest.BookImage.FileName);
 
 
-            //var response = await client.PostAsync("url_here", multipartContent);
-
-            //StringContent content = new StringContent(JsonConvert.SerializeObject(bookRequest), Encoding.UTF8, "application/json");
             var token = HttpContext.Session.GetString("Token");
             string endpoint = apiBaseUrl + "Books/SaveBook";
 
@@ -69,7 +69,6 @@ namespace BookStore_App.Controllers
             {
 
                 client.DefaultRequestHeaders.Add("Authorization", token);
-                //using (var Response = await client.PostAsync(endpoint, content))
                 using (var Response = await client.PostAsync(endpoint, multipartContent))
                 {
                     var apiResponse = await Response.Content.ReadAsStringAsync();
@@ -77,9 +76,9 @@ namespace BookStore_App.Controllers
 
                     if (responseMessage != null && responseMessage.IsSuccess && Response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        //var categoriesList = await GetAllCategories(String.Empty);
-                        //return View("Index", categoriesList);
-                        return View("Index");
+                        var BooksList = await GetAllBooks(String.Empty);
+                        UploadedFile(responseMessage, bookRequest);
+                        return View("Index", BooksList);
                     }
                     else
                     {
@@ -118,6 +117,46 @@ namespace BookStore_App.Controllers
             }
         }
 
+        private async Task<List<BooksResponse>> GetAllBooks(string searchString)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var token = HttpContext.Session.GetString("Token");
+                string endpoint = apiBaseUrl + "Books/GetBooks/" + searchString;
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<List<BooksResponse>>(apiResponse);
 
+                    if (responseMessage != null && Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        return responseMessage;
+                    }
+                    else
+                    {
+                        return new List<BooksResponse>();
+                    }
+                }
+            }
+        }
+
+
+        private string UploadedFile(ApiResponseMessage response, BookRequest model)
+        {
+            string uniqueFileName = null;
+
+            if (response.UniqueImageName != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/Books");
+                uniqueFileName = response.UniqueImageName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.BookImage.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
     }
 }

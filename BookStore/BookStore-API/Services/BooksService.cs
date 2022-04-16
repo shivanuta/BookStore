@@ -9,6 +9,7 @@ namespace BookStore_API.Services
 {
     public interface IBookService
     {
+        List<BooksResponse> GetAllBooks(string searchString);
         ApiResponseMessage SaveBook(BookRequest bookRequest);
     }
     public class BookService : IBookService
@@ -29,6 +30,24 @@ namespace BookStore_API.Services
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+
+
+        public List<BooksResponse> GetAllBooks(string searchString)
+        {
+            var books = from b in _context.Books
+                             select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.BookName!.Contains(searchString));
+            }
+
+            var response = _mapper.Map<List<BooksResponse>>(books.Where(x => x.IsActive).ToList());
+
+            return response;
+        }
+
+
         public ApiResponseMessage SaveBook(BookRequest bookRequest)
         {
             ApiResponseMessage response = new ApiResponseMessage();
@@ -50,6 +69,7 @@ namespace BookStore_API.Services
                 book.BookImage = uniqueImageName;
                 book.ModifiedDate = book.ModifiedDate != null ? book.ModifiedDate : DateTime.UtcNow;
                 _context.Books.Update(book);
+                response.UniqueImageName = uniqueImageName;
             }
             else
             {
@@ -57,6 +77,7 @@ namespace BookStore_API.Services
                 book.BookImage = uniqueImageName;
                 book.CreatedDate = book.CreatedDate != null ? book.CreatedDate : DateTime.UtcNow;
                 _context.Books.Add(book);
+                response.UniqueImageName = uniqueImageName;
             }
             _context.SaveChanges();
             response.SuccessMessage = "Book Added successful";

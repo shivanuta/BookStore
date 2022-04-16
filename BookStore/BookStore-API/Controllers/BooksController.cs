@@ -24,6 +24,13 @@ namespace BookStore_API.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("GetBooks/{searchString?}")]
+        public IActionResult GetBooks(string? searchString = null)
+        {
+            var response = _booksService.GetAllBooks(searchString).ToList();
+            return Ok(response);
+        }
+
         [HttpPost("SaveBook")]
         public IActionResult SaveBook([FromForm]BookRequest bookRequest)
         {

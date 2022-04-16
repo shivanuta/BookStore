@@ -1,7 +1,13 @@
 using BookStore_Models.Data;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    EnvironmentName = Environments.Development,
+    WebRootPath = "wwwroot"
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
