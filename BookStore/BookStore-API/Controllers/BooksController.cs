@@ -37,5 +37,19 @@ namespace BookStore_API.Controllers
             var response = _booksService.SaveBook(bookRequest);
             return Ok(response);
         }
+
+        [HttpGet("GetBookById/{id}")]
+        public IActionResult GetBookById(int id)
+        {
+            var response = _booksService.GetBookById(id);
+            return Ok(response);
+        }
+
+        [HttpGet("DeleteBook/{id}")]
+        public IActionResult DeleteBook(int id)
+        {
+            var response = _booksService.DeleteBook(id);
+            return Ok(response);
+        }
     }
 }

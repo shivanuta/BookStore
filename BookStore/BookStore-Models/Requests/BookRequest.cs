@@ -26,6 +26,7 @@ namespace BookStore_Models.Requests
         public string Published { get; set; }
 
         public IFormFile BookImage { get; set; }
+        public string? BookImageName { get; set; }
         public int CategoryId { get; set; }
 
         public bool IsActive { get; set; }

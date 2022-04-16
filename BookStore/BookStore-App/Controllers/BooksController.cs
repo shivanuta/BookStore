@@ -36,6 +36,37 @@ namespace BookStore_App.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var book = await GetBook(id);
+
+            return View(book);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var book = await GetBook(id);
+
+            return View("Create", book);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var token = HttpContext.Session.GetString("Token");
+            string endpoint = apiBaseUrl + "Books/DeleteBook/" + id;
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<ApiResponseMessage>(apiResponse);
+                    var booksList = await GetAllBooks(String.Empty);
+                    return View("Index", booksList);
+                }
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
@@ -157,6 +188,40 @@ namespace BookStore_App.Controllers
                 }
             }
             return uniqueFileName;
+        }
+
+        private async Task<BookRequest> GetBook(int id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var token = HttpContext.Session.GetString("Token");
+                string endpoint = apiBaseUrl + "Books/GetBookById/" + id;
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<BookRequest>(apiResponse);
+
+                    if (responseMessage != null && Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        return responseMessage;
+                    }
+                    else
+                    {
+                        return new BookRequest();
+                    }
+                }
+            }
+        }
+
+        public IFormFile GetFile(string fileName)
+        {
+            string path = "./wwwroot/images/books/" + fileName;
+            using (var stream = System.IO.File.OpenRead(path))
+            {
+                return new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
+            }
+
         }
     }
 }

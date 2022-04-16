@@ -11,6 +11,8 @@ namespace BookStore_API.Services
     {
         List<BooksResponse> GetAllBooks(string searchString);
         ApiResponseMessage SaveBook(BookRequest bookRequest);
+        BookRequest GetBookById(int id);
+        ApiResponseMessage DeleteBook(int id);
     }
     public class BookService : IBookService
     {
@@ -81,6 +83,41 @@ namespace BookStore_API.Services
             }
             _context.SaveChanges();
             response.SuccessMessage = "Book Added successful";
+            response.IsSuccess = true;
+            return response;
+        }
+
+        public BookRequest GetBookById(int id)
+        {
+            var books = from b in _context.Books
+                             select b;
+
+            books = books.Where(s => s.Id == id && s.IsActive);
+
+            var response = _mapper.Map<BookRequest>(books.FirstOrDefault());
+
+            return response;
+        }
+
+        public ApiResponseMessage DeleteBook(int id)
+        {
+            ApiResponseMessage response = new ApiResponseMessage();
+            var book = _context.Books.Where(s => s.Id == id && s.IsActive).FirstOrDefault();
+            // validate
+            if (book != null)
+            {
+                book.IsActive = false;
+                _context.Books.Update(book);
+            }
+            else
+            {
+                response.ErrorMessage = "Delete Failed...";
+                response.IsSuccess = false;
+                return response;
+
+            }
+            _context.SaveChanges();
+            response.SuccessMessage = "Category Added successful";
             response.IsSuccess = true;
             return response;
         }

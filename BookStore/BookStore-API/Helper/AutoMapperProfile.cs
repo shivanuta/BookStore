@@ -22,6 +22,9 @@ public class AutoMapperProfile : Profile
                  .ForMember(dest => dest.BookImage, opt => opt.MapFrom(src => src.BookImage.FileName));
 
         CreateMap<Books, BooksResponse>();
+        CreateMap<Books, BookRequest>()
+            .ForMember(d => d.BookImage, opt => opt.Ignore())
+            .ForMember(dest => dest.BookImageName, opt => opt.MapFrom(src => src.BookImage));
     }
 }
 
