@@ -9,6 +9,7 @@
         public DbSet<Users> Users { get; set; }        public DbSet<AdminUsers> AdminUsers { get; set; }
         public DbSet<Shops> Shops { get; set; }
         public DbSet<Categories> Categories { get; set; }
+        public DbSet<Books> Books { get; set; }
     }
 
 }

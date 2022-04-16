@@ -3,7 +3,15 @@ using BookStore_API.Authorization;
 using BookStore_API.Helper;
 using BookStore_Models.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    EnvironmentName = Environments.Development,
+    WebRootPath = "wwwroot"
+});
+
+//var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -24,6 +32,8 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IBookService, BookService>();
+
 
 var app = builder.Build();
 

@@ -1,0 +1,108 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_userLayout";
+}
+
+@model BookStore_Models.Requests.BookRequest
+
+@{
+    ViewData["Title"] = "New";
+}
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white">
+            <h4>Add New Book </h4>
+        </div>
+        <div class="card-body">
+            <form enctype="multipart/form-data" asp-action="AddBook">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="BookTitle" class="control-label"></label>
+                            <input asp-for="BookTitle" class="form-control" />
+                            <span asp-validation-for="BookTitle" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="BookName" class="control-label"></label>
+                            <input asp-for="BookName" class="form-control" />
+                            <span asp-validation-for="BookName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            @*<select asp-for="Cid" asp-items="@(new SelectList(ViewBag.message,"Cid","Cname"))"></select> *@
+                            <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.categories,"Id","CategoryName"))">
+                                @*<option value="">Choose Category</option>
+                                <option value=1>Novels</option>
+                                <option value=2>Movies</option>*@
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Author" class="control-label"></label>
+                            <input asp-for="Author" class="form-control" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Publisher" class="control-label"></label>
+                            <input asp-for="Publisher" class="form-control" />
+                            <span asp-validation-for="Publisher" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Published" class="control-label"></label>
+                            <input asp-for="Published" class="form-control" />
+                            <span asp-validation-for="Published" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="BookImage" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="BookImage" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            <span asp-validation-for="BookImage" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <input type="submit" value="submit" class="btn btn-sm btn-primary rounded-0 text-uppercase" />
+                    <a asp-action="Index" class="btn btn-sm btn-primary rounded-0 text-uppercase"><i class="fas fa-fast-backward"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<partial name="_ValidationScriptsPartial" />
+<script type="text/javascript">
+
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+}
+

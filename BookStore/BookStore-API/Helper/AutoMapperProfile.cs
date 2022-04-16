@@ -17,6 +17,9 @@ public class AutoMapperProfile : Profile
         CreateMap<Categories, CategoriesResponse>();
         CreateMap<CategoryRequest, Categories>();
         CreateMap<Categories, CategoryRequest>();
+
+        CreateMap<BookRequest, Books>()
+                 .ForMember(dest => dest.BookImage, opt => opt.MapFrom(src => src.BookImage.FileName));
     }
 }
 
