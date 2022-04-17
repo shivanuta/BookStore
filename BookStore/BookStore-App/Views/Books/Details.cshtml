@@ -1,0 +1,68 @@
+﻿@model BookStore_Models.Requests.BookRequest;
+
+@{
+    Layout = "_userLayout";
+    ViewData["Title"] = "Details";
+}
+
+<div class="text-end">
+    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
+    <a asp-action="Index">Back To List</a>
+</div>
+
+<div class="text-center">
+    <h4>Book Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BookImage)
+        </dt>
+        <dd>
+            <img src="~/images/Books/@Model.BookImageName"
+                 height="60" width="60"
+                 asp-append-version="true" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BookName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BookName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BookTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BookTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Published)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Published)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+</div>

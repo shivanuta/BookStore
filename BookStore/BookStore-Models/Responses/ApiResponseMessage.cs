@@ -16,6 +16,7 @@ namespace BookStore_Models.Responses
         public bool IsSuccess { get; set; }
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
+        public string UniqueImageName { get; set; }
         public HttpResponseMessage ResponseMesssage { get; set; }
     }
 }
