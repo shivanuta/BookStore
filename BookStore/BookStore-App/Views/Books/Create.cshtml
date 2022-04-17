@@ -41,8 +41,8 @@
                             @*<select asp-for="Cid" asp-items="@(new SelectList(ViewBag.message,"Cid","Cname"))"></select> *@
                             <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.categories,"Id","CategoryName"))">
                                 @*<option value="">Choose Category</option>
-                                <option value=1>Novels</option>
-                                <option value=2>Movies</option>*@
+                                    <option value=1>Novels</option>
+                                    <option value=2>Movies</option>*@
                             </select>
                             <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
@@ -77,18 +77,33 @@
                         <div class="form-group">
                             <label asp-for="BookImage" class="control-label"></label>
                             <div class="custom-file">
-                                <input asp-for="BookImage" class="custom-file-input" id="customFile">
+                                <input asp-for="BookImage" class="custom-file-input" id="customFile" accept="image/*">
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                             <span asp-validation-for="BookImage" class="text-danger"></span>
 
                         </div>
                     </div>
+                    @if (Model != null && Model.Id != 0)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Book Image</label>
+                                <img src="~/images/Books/@Model.BookImageName"
+                                 height="100" width="100"
+                                 asp-append-version="true" />
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div class="form-group mt-3">
                     <input type="submit" value="submit" class="btn btn-sm btn-primary rounded-0 text-uppercase" />
                     <a asp-action="Index" class="btn btn-sm btn-primary rounded-0 text-uppercase"><i class="fas fa-fast-backward"></i> Back to List</a>
                 </div>
+
+                @Html.HiddenFor(modelItem => modelItem.Id)
+                @Html.HiddenFor(modelItem => modelItem.CreatedBy)
+                @Html.HiddenFor(modelItem => modelItem.CreatedDate)
             </form>
         </div>
     </div>
@@ -98,11 +113,12 @@
 <partial name="_ValidationScriptsPartial" />
 <script type="text/javascript">
 
-    // Add the following code if you want the name of the file appear on select
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
 </script>
 }
 
