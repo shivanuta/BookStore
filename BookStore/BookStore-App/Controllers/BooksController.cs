@@ -231,32 +231,6 @@ namespace BookStore_App.Controllers
 
             }
             return bookRequest;
-            //if (!String.IsNullOrEmpty(fileName))
-            //{
-            //    var filepath = "./wwwroot/images/books/" + fileName;
-
-            //    using (var stream = System.IO.File.OpenRead($"{filepath}"))
-            //    {
-
-            //        bookRequest.BookImage = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
-
-            //        // ...
-            //        // code logic here
-            //    }
-            //}
-            //return bookRequest;
-            //if(!String.IsNullOrEmpty(fileName))
-            //{
-            //    string path = "./wwwroot/images/books/" + fileName;
-            //    using (var stream = System.IO.File.OpenRead(path))
-            //    {
-            //        return new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
-            //    }
-            //}
-            //else
-            //{
-            //    return null;
-            //}
 
         }
     }
