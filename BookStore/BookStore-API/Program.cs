@@ -31,6 +31,7 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IStockService, StockService>();
 
 
 var app = builder.Build();
