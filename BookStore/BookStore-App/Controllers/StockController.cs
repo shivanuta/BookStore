@@ -27,7 +27,17 @@ namespace BookStore_App.Controllers
         public async Task<IActionResult> Index(string Prefix)
         {
             List<AutoListResponse> booksList = await GetAllBooks(Prefix);
-            return Ok(booksList);
+            StockRequest stockRequest = new StockRequest
+            {
+                booksList = booksList
+            };
+            return Ok(stockRequest);
+        }
+
+        [HttpPost("UpdateStock")]
+        public IActionResult UpdateStock(StockRequest stockRequest)
+        {
+            return Ok();
         }
 
         private async Task<List<AutoListResponse>> GetAllBooks(string searchString)
