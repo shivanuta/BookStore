@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BookStore_Models.Data;
+using BookStore_Models.DBModels;
+using BookStore_Models.Requests;
 using BookStore_Models.Responses;
 
 namespace BookStore_API.Services
@@ -7,6 +9,8 @@ namespace BookStore_API.Services
     public interface IStockService
     {
         IEnumerable<AutoListResponse> GetBooks(string searchString);
+
+        ApiResponseMessage UpdateStockDetails(StockRequest stockRequest);
 
     }
     public class StockService : IStockService
@@ -45,6 +49,35 @@ namespace BookStore_API.Services
             }
         }
 
+        public ApiResponseMessage UpdateStockDetails(StockRequest stockRequest)
+        {
+            ApiResponseMessage response = new ApiResponseMessage();
+            // validate
+            if (_context.Stock.Any(x => x.BookId != stockRequest.AutoListResponse.Id))
+            {
+                response.ErrorMessage = "Book '" + stockRequest.AutoListResponse.Name + "' is Not Exist";
+                response.IsSuccess = false;
+                return response;
+            }
 
+            // map model to new user object
+            var stock = _mapper.Map<Stock>(stockRequest);
+
+            // save category
+            if (stock.Id != 0)
+            {
+                stock.AvailableStock = stock.TotalStock;
+                _context.Stock.Update(stock);
+            }
+            else
+            {
+                stock.AvailableStock = stock.TotalStock;
+                _context.Stock.Add(stock);
+            }
+            _context.SaveChanges();
+            response.SuccessMessage = "Stock Added successful";
+            response.IsSuccess = true;
+            return response;
+        }
     }
 }

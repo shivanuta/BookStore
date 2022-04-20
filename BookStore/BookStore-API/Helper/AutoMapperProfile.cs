@@ -25,6 +25,10 @@ public class AutoMapperProfile : Profile
         CreateMap<Books, BookRequest>()
             .ForMember(d => d.BookImage, opt => opt.Ignore())
             .ForMember(dest => dest.BookImageName, opt => opt.MapFrom(src => src.BookImage));
+
+        CreateMap<StockRequest, Stock>()
+            .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.AutoListResponse.Id))
+            .ForMember(d => d.AvailableStock, opt => opt.Ignore());
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BookStore_API.Authorization;
 using BookStore_API.Services;
+using BookStore_Models.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,13 @@ namespace BookStore_API.Controllers
         public IActionResult GetBooks(string searchString)
         {
            var response = _stockService.GetBooks(searchString).ToList();
+            return Ok(response);
+        }
+
+        [HttpPost("UpdateStockDetails")]
+        public IActionResult UpdateStockDetails(StockRequest stockRequest)
+        {
+            var response = _stockService.UpdateStockDetails(stockRequest);
             return Ok(response);
         }
     }
