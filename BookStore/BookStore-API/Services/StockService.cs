@@ -3,6 +3,7 @@ using BookStore_Models.Data;
 using BookStore_Models.DBModels;
 using BookStore_Models.Requests;
 using BookStore_Models.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore_API.Services
 {
@@ -52,20 +53,14 @@ namespace BookStore_API.Services
         public ApiResponseMessage UpdateStockDetails(StockRequest stockRequest)
         {
             ApiResponseMessage response = new ApiResponseMessage();
-            // validate
-            if (_context.Stock.Any(x => x.BookId != stockRequest.AutoListResponse.Id))
-            {
-                response.ErrorMessage = "Book '" + stockRequest.AutoListResponse.Name + "' is Not Exist";
-                response.IsSuccess = false;
-                return response;
-            }
-
-            // map model to new user object
+            
             var stock = _mapper.Map<Stock>(stockRequest);
 
-            // save category
-            if (stock.Id != 0)
+            var stockObj = GetStockByBookId(stock.BookId);
+
+            if (stockObj != null)
             {
+                stock.Id = stockObj.Id;
                 stock.AvailableStock = stock.TotalStock;
                 _context.Stock.Update(stock);
             }
@@ -75,8 +70,20 @@ namespace BookStore_API.Services
                 _context.Stock.Add(stock);
             }
             _context.SaveChanges();
-            response.SuccessMessage = "Stock Added successful";
+            response.SuccessMessage = "Stock Added successfully";
             response.IsSuccess = true;
+            return response;
+        }
+
+        private StockRequest GetStockByBookId(int bookId)
+        {
+            var stockDetails = from c in _context.Stock
+                             select c;
+
+            stockDetails = stockDetails.Where(s => s.BookId == bookId);
+
+            var response = _mapper.Map<StockRequest>(stockDetails.AsNoTracking().FirstOrDefault());
+
             return response;
         }
     }

@@ -29,6 +29,8 @@ public class AutoMapperProfile : Profile
         CreateMap<StockRequest, Stock>()
             .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.AutoListResponse.Id))
             .ForMember(d => d.AvailableStock, opt => opt.Ignore());
+
+        CreateMap<Stock, StockRequest>();
     }
 }
 

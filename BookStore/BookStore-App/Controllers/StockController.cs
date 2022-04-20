@@ -2,6 +2,7 @@
 using BookStore_Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace BookStore_App.Controllers
 {
@@ -34,10 +35,46 @@ namespace BookStore_App.Controllers
             return Ok(stockRequest);
         }
 
-        [HttpPost("UpdateStock")]
-        public IActionResult UpdateStock(StockRequest stockRequest)
+        [HttpPost]
+        public async Task<IActionResult> UpdateStock(StockRequest stockRequest)
         {
-            return Ok();
+            if (stockRequest.Id != 0)
+            {
+                stockRequest.ModifiedBy = HttpContext.Session.GetInt32("UserId");
+                stockRequest.ModifiedDate = System.DateTime.UtcNow;
+            }
+            else
+            {
+                stockRequest.CreatedBy = HttpContext.Session.GetInt32("UserId");
+                stockRequest.CreatedDate = System.DateTime.UtcNow;
+            }
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(stockRequest), Encoding.UTF8, "application/json");
+            var token = HttpContext.Session.GetString("Token");
+            string endpoint = apiBaseUrl + "Stock/UpdateStockDetails";
+
+            using (HttpClient client = new HttpClient())
+            {
+
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                using (var Response = await client.PostAsync(endpoint, content))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<ApiResponseMessage>(apiResponse);
+
+                    if (responseMessage != null && responseMessage.IsSuccess && Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        ModelState.Clear();
+                        TempData["Message"] = responseMessage.SuccessMessage;
+                        return View("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, responseMessage.ErrorMessage);
+                        return View("Index", stockRequest);
+                    }
+                }
+            }
         }
 
         private async Task<List<AutoListResponse>> GetAllBooks(string searchString)

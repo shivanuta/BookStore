@@ -29,6 +29,13 @@ namespace BookStore_Models.DBModels
 
         public Nullable<int> AvailableStock { get; set; }
 
+        [Required(ErrorMessage = "Please enter Cost Per Book")]
+        [Display(Name = "Book Cost")]
+        public decimal AmountPerBook { get; set; }
+
+        public int DiscountPercentage { get; set; }
+        public Nullable<decimal> DeliveryCharges { get; set; }
+
         public bool IsActive { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<DateTime> CreatedDate { get; set; }
