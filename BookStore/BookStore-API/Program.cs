@@ -32,6 +32,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IShopService, ShopService>();
 
 
 var app = builder.Build();
