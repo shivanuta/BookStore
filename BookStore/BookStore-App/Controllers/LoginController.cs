@@ -101,7 +101,7 @@ namespace BookStore_App.Controllers
                         HttpContext.Session.SetString("Name", authenticateResponse.FirstName + " " + authenticateResponse.LastName);
                         HttpContext.Session.SetInt32("UserId", authenticateResponse.Id);
                         TempData["Profile"] = JsonConvert.SerializeObject(apiResponse);
-                        return RedirectToAction("Index", "Profile");
+                        return RedirectToAction("BuyBooks", "Home");
                     }
                     else
                     {
