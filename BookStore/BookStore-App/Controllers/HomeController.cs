@@ -1,5 +1,7 @@
 ﻿using BookStore_App.Models;
+using BookStore_Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace BookStore_App.Controllers
@@ -27,6 +29,44 @@ namespace BookStore_App.Controllers
         {
             return View();
         }
+
+        [HttpGet("BuyBooks")]
+        public async Task<IActionResult> BuyBooks()
+        {
+            var booksDetailsList = await GetAllBooksDetails(String.Empty);
+            return View(booksDetailsList);
+        }
+
+        [HttpPost("BuyBooks/{searchString}")]
+        public async Task<IActionResult> BuyBooks(string searchString)
+        {
+            var booksDetailsList = await GetAllBooksDetails(searchString);
+            return View(booksDetailsList);
+        }
+
+        private async Task<List<BooksDetailsResponse>> GetAllBooksDetails(string searchString)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var token = HttpContext.Session.GetString("Token");
+                string endpoint = apiBaseUrl + "Shop/GetBooksDetails/" + searchString;
+                using (var Response = await client.GetAsync(endpoint))
+                {
+                    var apiResponse = await Response.Content.ReadAsStringAsync();
+                    var responseMessage = JsonConvert.DeserializeObject<List<BooksDetailsResponse>>(apiResponse);
+
+                    if (responseMessage != null && Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        return responseMessage;
+                    }
+                    else
+                    {
+                        return new List<BooksDetailsResponse>();
+                    }
+                }
+            }
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
