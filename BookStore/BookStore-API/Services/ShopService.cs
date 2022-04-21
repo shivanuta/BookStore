@@ -36,6 +36,7 @@ namespace BookStore_API.Services
                                             Id = bk.Id,
                                             BookTitle = bk.BookName,
                                             BookImage = bk.BookImage,
+                                            Author = bk.Author,
                                             PublishedDate = bk.Published,
                                             ActualPrice = st.AmountPerBook,
                                             DiscountPercentage = st.DiscountPercentage

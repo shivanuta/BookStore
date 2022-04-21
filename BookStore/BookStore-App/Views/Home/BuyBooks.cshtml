@@ -33,7 +33,6 @@
             <div class="form-group d-flex">
                 <input type="text" id="AutoListResponse_Name" class="form-control" placeholder="enter book name and search..." />
                 <input type="button" value="Search" id="btnSearch" onclick="searchBooks()" class="btn btn-sm btn-primary rounded-0 text-uppercase" />
-                @*<a href="@Url.Action("BuyBooks")">Back To List</a>*@
             </div>
 
         </div>
@@ -54,8 +53,8 @@
                                 <img class="pic-2" src="~/images/Books/@item.BookImage">
                             </a>
                             <ul class="social">
-                                <li><a href="#" data-tip="Quick View"><i class="fa fa-eye"></i></a></li>
-                                <li><a href="#" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="@Url.Action("Index", "Cart")" data-tip="Cart View"><i class="fa fa-eye"></i></a></li>
+                                <li><a href="@Url.Action("AddToCart", "Cart", new { id = item.Id })" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                             @{
                                 var publishedDate = Convert.ToDateTime(item.PublishedDate);
@@ -79,7 +78,7 @@
                                 $@item.PriceAfterDiscount.ToString("0.00")
                                 <span>$@Convert.ToString(item.ActualPrice)</span>
                             </div>
-                            <a class="add-to-cart" href="">ADD TO CART</a>
+                            <a class="add-to-cart" href="@Url.Action("AddToCart", "Cart", new { id = item.Id })">ADD TO CART</a>
                         </div>
                     </div>
                 </div>

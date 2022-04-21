@@ -37,8 +37,8 @@ namespace BookStore_App.Controllers
             return View(booksDetailsList);
         }
 
-        [HttpPost("BuyBooks/{searchString}")]
-        public async Task<IActionResult> BuyBooks(string searchString)
+        [HttpPost("BuyBooks/{searchString?}")]
+        public async Task<IActionResult> BuyBooks(string? searchString)
         {
             var booksDetailsList = await GetAllBooksDetails(searchString);
             return View(booksDetailsList);
