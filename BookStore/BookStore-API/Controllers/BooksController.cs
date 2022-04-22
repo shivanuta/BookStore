@@ -27,7 +27,7 @@ namespace BookStore_API.Controllers
         [HttpGet("GetBooks/{searchString?}")]
         public IActionResult GetBooks(string? searchString = null)
         {
-            var response = _booksService.GetAllBooks(searchString).ToList();
+            var response = _booksService.GetAllBooks(searchString);
             return Ok(response);
         }
 
