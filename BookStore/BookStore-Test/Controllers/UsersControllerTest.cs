@@ -174,5 +174,42 @@ namespace BookStore_Test.Controllers
             var okResult = result as OkObjectResult;
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
         }
+
+        [Fact]
+        public void UserController_UserRegistrationSuccess_Test()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var mockMapper = new Mock<IMapper>();
+
+            var controller = new UsersController(mockUserService.Object, mockMapper.Object);
+
+            var registerRequest = new RegisterRequest
+            {
+                Username = "shiva",
+                Password = "123123",
+                Email = "shiva@gmail.com",
+                FirstName = "Shiva",
+                LastName = "Nutakki",
+                MobileNo = "9999999999",
+            };
+            var result = controller.Register(registerRequest);
+            var okResult = result as OkObjectResult;
+            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        }
+
+        [Fact]
+        public void UserController_UserRegistration_EmptyObject_Test()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var mockMapper = new Mock<IMapper>();
+
+            var controller = new UsersController(mockUserService.Object, mockMapper.Object);
+
+            var registerRequest = new RegisterRequest();
+            
+            var result = controller.Register(registerRequest);
+            var okResult = result as OkObjectResult;
+            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        }
     }
 }
